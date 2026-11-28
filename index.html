@@ -3,14 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <title>FokusKu — Workspace Fokus Minimalis</title>
+    <title>NotaKu — Pembuat Invoice & Penawaran Harga</title>
     <meta
       name="description"
-      content="Workspace fokus offline-first: Timer Pomodoro fleksibel, daftar task harian drag & drop, mixer suara ambient Web Audio API, dan heatmap habit tracker."
+      content="Buat invoice dan penawaran harga profesional untuk freelancer, katering, dan jasa rumahan. Unduh PDF, pantau status pembayaran, dan kirim langsung lewat WhatsApp."
     />
-    <meta name="theme-color" content="#0F766E" />
+    <meta name="theme-color" content="#f5f6f8" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="NotaKu" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta property="og:title" content="NotaKu — Invoice & Penawaran Harga" />
+    <meta
+      property="og:description"
+      content="Invoice PDF, penawaran harga, pemantauan pembayaran, dan pengiriman via WhatsApp dalam satu aplikasi ringan yang bekerja offline."
+    />
     <link rel="icon" type="image/svg+xml" href="/icons/icon.svg" />
     <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png" />
     <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
@@ -18,11 +24,11 @@
     <script>
       (function () {
         try {
-          var saved = localStorage.getItem('fokusku_theme');
+          var saved = localStorage.getItem('notaku_theme');
           var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
           document.documentElement.setAttribute('data-theme', theme);
           var meta = document.querySelector('meta[name="theme-color"]');
-          if (meta) meta.setAttribute('content', theme === 'dark' ? '#0F1115' : '#F7F7F4');
+          if (meta) meta.setAttribute('content', theme === 'dark' ? '#0b0f16' : '#f5f6f8');
         } catch (e) {}
       })();
     </script>

@@ -1,20 +1,10 @@
-const CACHE_NAME = 'fokusku-cache-v1';
-const APP_SHELL = [
-  '/',
-  '/index.html',
-  '/manifest.webmanifest',
-  '/icons/icon.svg',
-  '/icons/icon-192.png',
-  '/icons/icon-512.png',
-  '/icons/apple-touch-icon.png',
-];
+/* NotaKu Service Worker — cache-first untuk aset, jaringan untuk navigasi. */
+const CACHE = 'notaku-v1';
+const CORE = ['/', '/index.html', '/manifest.webmanifest', '/icons/icon.svg'];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches
-      .open(CACHE_NAME)
-      .then((cache) => cache.addAll(APP_SHELL))
-      .then(() => self.skipWaiting())
+    caches.open(CACHE).then((cache) => cache.addAll(CORE)).then(() => self.skipWaiting())
   );
 });
 
@@ -22,61 +12,34 @@ self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches
       .keys()
-      .then((keys) =>
-        Promise.all(
-          keys
-            .filter((key) => key !== CACHE_NAME)
-            .map((key) => caches.delete(key))
-        )
-      )
+      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k))))
       .then(() => self.clients.claim())
   );
 });
 
 self.addEventListener('fetch', (event) => {
   const { request } = event;
-  if (request.method !== 'GET') return;
+  if (request.method !== 'GET' || !request.url.startsWith(self.location.origin)) return;
 
-  const url = new URL(request.url);
-  if (url.origin !== self.location.origin) return;
-
-  // Skip Vite dev-server internals
-  if (
-    url.pathname.startsWith('/@vite') ||
-    url.pathname.startsWith('/@react-refresh') ||
-    url.pathname.startsWith('/node_modules/')
-  ) {
-    return;
-  }
-
-  // Navigation requests: network-first with offline fallback
   if (request.mode === 'navigate') {
     event.respondWith(
-      fetch(request)
-        .then((response) => {
-          const clone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
-          return response;
-        })
-        .catch(() => caches.match('/index.html'))
+      fetch(request).catch(() => caches.match('/index.html').then((res) => res || Response.error()))
     );
     return;
   }
 
-  // Static assets: stale-while-revalidate
   event.respondWith(
     caches.match(request).then((cached) => {
-      const networkFetch = fetch(request)
+      if (cached) return cached;
+      return fetch(request)
         .then((response) => {
-          if (response && response.status === 200) {
+          if (response.ok && response.type === 'basic') {
             const clone = response.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
+            caches.open(CACHE).then((cache) => cache.put(request, clone));
           }
           return response;
         })
         .catch(() => cached);
-
-      return cached || networkFetch;
     })
   );
 });

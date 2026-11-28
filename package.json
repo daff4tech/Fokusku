@@ -1,24 +1,28 @@
 {
-  "name": "fokusku",
+  "name": "notaku",
   "version": "1.0.0",
   "private": true,
-  "description": "FokusKu — Pomodoro + Habit Tracker + Ambient Sound (Offline-first PWA)",
+  "description": "NotaKu — Pembuat invoice & penawaran harga untuk freelancer, katering, dan jasa rumahan (PDF, status pembayaran, kirim WhatsApp).",
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0 --port 5173",
     "build": "vite build",
     "preview": "vite preview --host 0.0.0.0 --port 4173",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
-    "chart.js": "^4.4.7",
     "lucide-react": "^0.468.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.13",
     "@vitejs/plugin-react": "^4.3.4",
-    "vitest": "^2.1.8",
-    "vite": "^5.4.11"
+    "jsdom": "^25.0.1",
+    "vite": "^5.4.11",
+    "vitest": "^2.1.8"
   }
 }
